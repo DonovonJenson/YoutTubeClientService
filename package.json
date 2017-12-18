@@ -19,6 +19,10 @@
   "dependencies": {
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
-    "get-json": "^1.0.0"
+    "express-status-monitor": "^1.0.1",
+    "express-winston": "^2.4.0",
+    "get-json": "^1.0.0",
+    "winston": "^2.4.0",
+    "winston-elasticsearch": "^0.5.5"
   }
 }

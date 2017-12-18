@@ -124,10 +124,7 @@ for (let i = 0; i < 10000; i++){
   video.snippet.statistics.commentCount = randomNumber(0, 1000000);
   videos.push({ index:  { _index: 'video', _type: 'uploaded'} })
   videos.push(video);
-  //console.log(video)
 }
-
-//videos = JSON.stringify(videos);
 
 client.bulk({  
   body: videos
