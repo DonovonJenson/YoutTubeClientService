@@ -25,11 +25,29 @@ app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.get('/hi', (req, res) => res.send('Hey back to you, fella!'))
 
-app.get('/search', (req, res) => {
+app.get('/search/:term', (req, res) => {
 	res.status(200);
-	res.send();
+	var searchTerm = req.params.term
+
+	client.search({
+	  index: 'video',
+	  type: 'uploaded',
+	  body: {
+	    query: {
+		  fuzzy: {
+		    "snippet.title": searchTerm
+     	  }
+        }
+      }
+	}).then(function (body) {
+	  var hits = body.hits.hits;
+	  res.send(hits);
+	}, function (error) {
+	  console.trace(error.message);
+	  res.send('error!')
+	});
+
 })
 
 app.post('/clientEvent', (req, res) =>{
@@ -43,3 +61,4 @@ app.post('/upload', (req, res) =>{
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
+

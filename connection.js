@@ -5,7 +5,7 @@ var client = new elasticsearch.Client( {
     'http://elastic:@127.0.0.1:9200/',
     //'https://[username]:[password]@localhost:9200/'
   ],
-  log: 'trace'
+  log: 'info'
 });
 
 module.exports = client;
