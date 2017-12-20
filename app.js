@@ -7,6 +7,9 @@ var winston = require('winston'),
     expressWinston = require('express-winston');
 var bodyParser = require('body-parser');
 var axios = require('axios');
+var keys = require('./env.js');
+var AWS = require('aws-sdk');
+
 
 
 app.use(expressWinston.logger({

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/DonovonJenson/YoutTube#readme",
   "dependencies": {
+    "aws-sdk": "^2.172.0",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "elasticsearch": "^14.0.0",
