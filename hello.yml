@@ -1,14 +1,12 @@
 config:
   target: "http://localhost:3000"
   phases:
-    - duration: 1
-      arrivalRate: 1
-      rampTo: 1
+    - duration: 60
+      arrivalRate: 1000
+      rampTo: 5000
 scenarios:
     - flow:
-      - get: 
-          url: "/video/C8ukMacEEJF"
       - post: 
-          url: "/upload"
+          url: "/dbWriteTestRoute"
           json:
-            body: "{"what":"the"}"
+            body: 

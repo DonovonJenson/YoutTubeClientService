@@ -105,6 +105,19 @@ findVideos.start();
 //End Consumer
 
 
+//Route for testing Elasticsearch writing
+// app.post('/dbWriteTestRoute', (req, res) => {
+// 	var video = JSON.stringify({"video_url_id":"Ks-_Mh1QhMc","snippet":{"publishedAt":"2017-12-20T09:24:56.000Z","channelId":"UCo7i93EtJhQub3SDKrtIAPA","title":"Rap 2018: Best Rap Songs 2018 (Top Trap Rap & Rap Music Playlist)","description":"\"Music can change the world because it can change people....","thumbnails":{"url":"https://i.ytimg.com/vi/4LfJnj66HVQ/default.jpg","width":120,"height":90},"channelTitle":"#RedMusic: HotMusicCharts","Tags":["Amy Cuddy","TED","TEDTalk","TEDTalks","TED Talk","TED Talks","TEDGlobal","brain","business","psychology","self","Success"],"categoryId":"22","duration":150,"statistics":{"viewCount":13403317,"likeCount":171513,"dislikeCount":3214,"favoriteCount":0,"commentCount":6692}}});
+// 	var inputVideo = JSON.parse(video)
+//    	client.index({  
+// 	  index: 'video',
+// 	  type: 'uploaded',
+// 	  body: inputVideo })
+// 	  res.send('Sent');
+
+// })
+
+
 //Route for new events from the client
 app.post('/clientEvent', (req, res) =>{
 	res.status(201);
