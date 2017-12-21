@@ -4,7 +4,7 @@
   "description": "The project description",
   "main": ".eslintrc.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -20,11 +20,14 @@
     "aws-sdk": "^2.172.0",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
     "express-status-monitor": "^1.0.1",
     "express-winston": "^2.4.0",
     "get-json": "^1.0.0",
+    "mocha": "^4.0.1",
+    "request": "^2.83.0",
     "sqs-consumer": "^3.8.0",
     "winston": "^2.4.0",
     "winston-elasticsearch": "^0.5.5"
