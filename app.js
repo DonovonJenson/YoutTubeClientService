@@ -26,6 +26,8 @@ app.use(expressWinston.logger({
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+
+//Route to return a list of videos based on search term
 app.get('/search/:term', (req, res) => {
 	//Possibly come back and parse down how much data is sent to client.
 	res.status(200);
@@ -51,6 +53,8 @@ app.get('/search/:term', (req, res) => {
 
 })
 
+
+//Route to return a specific video 
 app.get('/video/:id', (req, res) => {
 	//Sends back a single video based on the ID, should be sent after user picks specific video in client.
 	res.status(200);
@@ -76,7 +80,7 @@ app.get('/video/:id', (req, res) => {
 
 })
 
-
+//Consumer uses polling to check for new videos
 const findVideos = Consumer.create({
   queueUrl: 'https://sqs.us-west-2.amazonaws.com/867486098166/Uploads',
   handleMessage: (message, done) => {
@@ -98,18 +102,10 @@ findVideos.on('error', (err) => {
  
 findVideos.start();
 
-// app.get('newvideos', (req, res) =>{
-// 	//Still need to add ability to process body, then upload to elasticsearch.
-// 	res.status(200);
-// 	axios.get('getfromQueURl')
-// 	.then(function (response) {
-// 		console.log(response)
-// 	.catch(function (error) {
-// 	    console.log(error);
-// 	    res.send('Error');
-// 	});
-// })
+//End Consumer
 
+
+//Route for new events from the client
 app.post('/clientEvent', (req, res) =>{
 	res.status(201);
 	var event = req.body;
@@ -131,6 +127,8 @@ sqs.sendMessage(params, function(err, data) {
 
 })
 
+
+//Route for new videos uploaded from client
 app.post('/upload', (req, res) =>{
 	res.status(201);
 	var uploadObject = req.body;
@@ -152,5 +150,5 @@ app.post('/upload', (req, res) =>{
 
 })
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(3000, () => console.log('listening on port 3000!'))
 
