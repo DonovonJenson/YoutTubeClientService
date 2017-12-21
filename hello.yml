@@ -1,9 +1,9 @@
 config:
   target: "http://localhost:3000"
   phases:
-    - duration: 60
-      arrivalRate: 2
-      rampTo: 1000
+    - duration: 1
+      arrivalRate: 1
+      rampTo: 1
 scenarios:
     - flow:
       - get: 
@@ -11,4 +11,4 @@ scenarios:
       - post: 
           url: "/upload"
           json:
-            body: "{what:'the'}"
+            body: "{"what":"the"}"

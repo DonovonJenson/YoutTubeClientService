@@ -7,30 +7,15 @@ var winston = require('winston'),
     expressWinston = require('express-winston');
 var bodyParser = require('body-parser');
 var axios = require('axios');
+const Consumer = require('sqs-consumer');
 var AWS = require('aws-sdk');
-AWS.config.update({region: 'us-west-2'});
-
+var keys = require('./AWS.js');
+AWS.config.update({
+  region: 'us-west-2',
+  accessKeyId: keys.aws_access_key_id,
+  secretAccessKey: keys.aws_secret_access_key
+});
 var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
-
-var params = {
- DelaySeconds: 10,
- MessageAttributes: {
-  "Title": {
-    DataType: "String",
-    StringValue: "The Whistler"
-   },
-  "Author": {
-    DataType: "String",
-    StringValue: "John Grisham"
-   },
-  "WeeksOn": {
-    DataType: "Number",
-    StringValue: "6"
-   }
- },
- MessageBody: "Information about current NY Times fiction bestseller for week of 12/11/2016.",
- QueueUrl: "SQS_QUEUE_URL"
-};
 
 app.use(expressWinston.logger({
   transports: [
@@ -40,7 +25,6 @@ app.use(expressWinston.logger({
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 
 app.get('/search/:term', (req, res) => {
 	//Possibly come back and parse down how much data is sent to client.
@@ -92,52 +76,80 @@ app.get('/video/:id', (req, res) => {
 
 })
 
-app.get('newvideos', (req, res) =>{
-	//Still need to add ability to process body, then upload to elasticsearch.
-	res.status(200);
-	axios.get('getfromQueURl')
-	.then(function (response) {
-		console.log(response)
-	    client.index({  
-		  index: 'video',
-		  type: 'uploaded',
-		  body: response })
-	    res.send('Sent');
-	})
-	.catch(function (error) {
-	    console.log(error);
-	    res.send('Error');
-	});
-})
+
+const findVideos = Consumer.create({
+  queueUrl: 'https://sqs.us-west-2.amazonaws.com/867486098166/Uploads',
+  handleMessage: (message, done) => {
+    var inputVideo = JSON.parse(message.Body)
+    console.log(inputVideo)
+   	client.index({  
+	  index: 'video',
+	  type: 'uploaded',
+	  body: inputVideo })
+	  res.send('Sent');
+    done();
+  },
+  sqs: new AWS.SQS()
+});
+ 
+findVideos.on('error', (err) => {
+  console.log(err.message);
+});
+ 
+findVideos.start();
+
+// app.get('newvideos', (req, res) =>{
+// 	//Still need to add ability to process body, then upload to elasticsearch.
+// 	res.status(200);
+// 	axios.get('getfromQueURl')
+// 	.then(function (response) {
+// 		console.log(response)
+// 	.catch(function (error) {
+// 	    console.log(error);
+// 	    res.send('Error');
+// 	});
+// })
 
 app.post('/clientEvent', (req, res) =>{
 	res.status(201);
 	var event = req.body;
-	console.log(event);
-	axios.post('https://sqs.us-west-2.amazonaws.com/867486098166/ClientEvents', event)  
-	.then(function (response) {
-    console.log(response);
-    	res.send('Sent');
-  })
-    .catch(function (error) {
-    console.log(error);
-    	res.send('Error');
-  });
+
+var params = {
+ DelaySeconds: 10,
+ MessageBody: JSON.stringify(req.body),
+ QueueUrl: "https://sqs.us-west-2.amazonaws.com/867486098166/ClientEvents"
+};
+
+sqs.sendMessage(params, function(err, data) {
+  if (err) {
+    console.log("Error", err);
+  } else {
+    console.log("Success", data.MessageId);
+  }
+});
+
+
 })
 
 app.post('/upload', (req, res) =>{
 	res.status(201);
 	var uploadObject = req.body;
 	console.log(uploadObject);
-	axios.post('theURLIWILLUSE', uploadObject)  
-	.then(function (response) {
-    console.log(response);
-    	res.send('Sent');
-  })
-    .catch(function (error) {
-    console.log(error);
-    	res.send('Error');
-  });
+
+	var params = {
+	 DelaySeconds: 10,
+	 MessageBody: JSON.stringify(req.body),
+	 QueueUrl: "https://sqs.us-west-2.amazonaws.com/867486098166/Uploads"
+	};
+
+	sqs.sendMessage(params, function(err, data) {
+	  if (err) {
+	    console.log("Error", err);
+	  } else {
+	    console.log("Success", data.MessageId);
+	  }
+	});
+
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
