@@ -2,8 +2,34 @@ var expect  = require("chai").expect;
 var request = require("request");
 var assert = require('assert');
 
+var superagent = require('superagent');
 
-describe('Routes', function() {
+describe("Upload Route", function() {
+    it("Respondes with 201", function(done) {
+        superagent.post('localhost:3000/upload')
+        .set('Content-Type', 'application/json')
+        .send('{"fieldName":"data"}')
+        .end(function(err,res){
+            expect(res.statusCode).to.equal(201)
+            done();
+        })
+    });        
+});
+
+describe("Client Event Route", function() {
+    it("Responds with 201", function(done) {
+        superagent.post('localhost:3000/clientEvent')
+        .set('Content-Type', 'application/json')
+        .send('{"fieldName":"data"}')
+        .end(function(err,res){
+            expect(res.statusCode).to.equal(201)
+            done();
+        })
+    });        
+});
+
+
+describe('Get Routes', function() {
 
   var url = "http://localhost:3000/";
 

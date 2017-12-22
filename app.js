@@ -158,8 +158,10 @@ app.post('/upload', (req, res) =>{
 	sqs.sendMessage(params, function(err, data) {
 	  if (err) {
 	    console.log("Error", err);
+	    res.send('Error');
 	  } else {
 	    console.log("Success", data.MessageId);
+	    res.send('Sent');
 	  }
 	});
 

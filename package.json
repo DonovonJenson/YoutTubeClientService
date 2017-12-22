@@ -29,6 +29,7 @@
     "mocha": "^4.0.1",
     "request": "^2.83.0",
     "sqs-consumer": "^3.8.0",
+    "superagent": "^3.8.2",
     "winston": "^2.4.0",
     "winston-elasticsearch": "^0.5.5"
   }
