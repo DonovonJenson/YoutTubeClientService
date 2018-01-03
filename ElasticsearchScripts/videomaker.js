@@ -1,4 +1,4 @@
-var client = require('./connection.js');
+var client = require('../connection.js');
 var wordMix = require('./wordMix.js');
 
 var videoTemplate = {

@@ -10,11 +10,13 @@ var axios = require('axios');
 const Consumer = require('sqs-consumer');
 var AWS = require('aws-sdk');
 var keys = require('./AWS.js');
+
 AWS.config.update({
   region: 'us-west-2',
   accessKeyId: keys.aws_access_key_id,
   secretAccessKey: keys.aws_secret_access_key
 });
+
 var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 app.use(expressWinston.logger({
@@ -22,6 +24,13 @@ app.use(expressWinston.logger({
     new Elasticsearch({level:'info'})
   ]
 }));
+
+app.use(expressWinston.errorLogger({
+  transports: [
+    new Elasticsearch({level:'info'})
+  ]
+}));
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -106,14 +115,16 @@ findVideos.start();
 
 
 //Route for testing Elasticsearch writing
+
+//consider getting bulk info then setting a worker to upload by bulk
 // app.post('/dbWriteTestRoute', (req, res) => {
-// 	var video = JSON.stringify({"video_url_id":"Ks-_Mh1QhMc","snippet":{"publishedAt":"2017-12-20T09:24:56.000Z","channelId":"UCo7i93EtJhQub3SDKrtIAPA","title":"Rap 2018: Best Rap Songs 2018 (Top Trap Rap & Rap Music Playlist)","description":"\"Music can change the world because it can change people....","thumbnails":{"url":"https://i.ytimg.com/vi/4LfJnj66HVQ/default.jpg","width":120,"height":90},"channelTitle":"#RedMusic: HotMusicCharts","Tags":["Amy Cuddy","TED","TEDTalk","TEDTalks","TED Talk","TED Talks","TEDGlobal","brain","business","psychology","self","Success"],"categoryId":"22","duration":150,"statistics":{"viewCount":13403317,"likeCount":171513,"dislikeCount":3214,"favoriteCount":0,"commentCount":6692}}});
+// 	var video = JSON.stringify({"video_url_id":"Ks-_Mh1QhMM","snippet":{"publishedAt":"2018-01-02T09:24:56.000Z","channelId":"UCo7i93EtJhQub3SDKrtIAPA","title":"Rap 2018: Best Rap Songs 2018 (Top Trap Rap & Rap Music Playlist)","description":"\"Music can change the world because it can change people....","thumbnails":{"url":"https://i.ytimg.com/vi/4LfJnj66HVQ/default.jpg","width":120,"height":90},"channelTitle":"#RedMusic: HotMusicCharts","Tags":["Amy Cuddy","TED","TEDTalk","TEDTalks","TED Talk","TED Talks","TEDGlobal","brain","business","psychology","self","Success"],"categoryId":"22","duration":150,"statistics":{"viewCount":13403317,"likeCount":171513,"dislikeCount":3214,"favoriteCount":0,"commentCount":6692}}});
 // 	var inputVideo = JSON.parse(video)
 //    	client.index({  
 // 	  index: 'video',
 // 	  type: 'uploaded',
 // 	  body: inputVideo })
-// 	  res.send('Sent');
+// 	 res.send('Sent');
 
 // })
 
